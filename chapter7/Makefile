@@ -5,7 +5,7 @@ SRC := $(wildcard *.asm)
 OBJS := $(patsubst %.asm, %.o, $(SRC))
 EXES := $(basename $(OBJS))
 
-CLINK := 0
+CLINK := 1
 
 .PHONY: all clean
 

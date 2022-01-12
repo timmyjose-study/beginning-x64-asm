@@ -43,7 +43,6 @@ main:
   add rax, rbx
   mov qword [sum], rax
 
-
   ; display sum
   xor rax, rax
   mov rdi, printfmt
