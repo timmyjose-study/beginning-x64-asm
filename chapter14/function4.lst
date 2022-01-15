@@ -1,0 +1,122 @@
+     1                                 %line 1+1 function4.asm
+     2                                 
+     3                                 
+     4                                 [extern printf]
+     5                                 [extern scanf]
+     6                                 [extern c_area]
+     7                                 [extern c_circumference]
+     8                                 [extern r_area]
+     9                                 [extern r_perimeter]
+    10                                 
+    11                                 [global pi]
+    12                                 
+    13                                 [section .data]
+    14 00000000 CC786654FB210940        pi dq 3.14159265458793
+    15                                 
+    16 00000008 456E74657220746865-     read_radius_prompt db 'Enter the radius of the circle:',10,0
+    17 00000008 20726164697573206F-
+    18 00000008 662074686520636972-
+    19 00000008 636C653A0A00       
+    20 00000029 256C6600                read_radius_fmt db '%lf',0
+    21 0000002D 256400                  read_int_fmt db '%d',0
+    22                                 
+    23 00000030 456E74657220746865-     read_length_prompt db 'Enter the length of the rectangle:',10,0
+    24 00000030 206C656E677468206F-
+    25 00000030 662074686520726563-
+    26 00000030 74616E676C653A0A00 
+    27 00000054 456E74657220746865-     read_breadth_prompt db 'Enter the breadth of the rectangle:',10,0
+    28 00000054 206272656164746820-
+    29 00000054 6F6620746865207265-
+    30 00000054 6374616E676C653A0A-
+    31 00000054 00                 
+    32                                 
+    33 00000079 546865206172656120-     print_c_area_fmt db 'The area of the circle is %.3f',10,0
+    34 00000079 6F6620746865206369-
+    35 00000079 72636C652069732025-
+    36 00000079 2E33660A00         
+    37 00000099 546865206369726375-     print_c_circum_fmt db 'The circumference of the circle is %.3f',10,0
+    38 00000099 6D666572656E636520-
+    39 00000099 6F6620746865206369-
+    40 00000099 72636C652069732025-
+    41 00000099 2E33660A00         
+    42 000000C2 546865206172656120-     print_r_area_fmt db 'The area of the rectangle is %ld',10,0
+    43 000000C2 6F6620746865207265-
+    44 000000C2 6374616E676C652069-
+    45 000000C2 7320256C640A00     
+    46 000000E4 54686520706572696D-     print_r_perimeter_fmt db 'The perimeter of the rectangle is %ld',10,0
+    47 000000E4 65746572206F662074-
+    48 000000E4 68652072656374616E-
+    49 000000E4 676C6520697320256C-
+    50 000000E4 640A00             
+    51                                 
+    52                                 [section .bss]
+    53 00000000 <gap>                   radius resq 1
+    54 00000008 <gap>                   length resq 1
+    55 00000010 <gap>                   breadth resq 1
+    56                                 
+    57                                 [section .text]
+    58                                 [global main]
+    59                                 
+    60                                 main:
+    61 00000000 55                      push rbp
+    62 00000001 4889E5                  mov rbp, rsp
+    63                                 
+    64                                 
+    65 00000004 4831C0                  xor rax, rax
+    66 00000007 48C7C7[00000000]        mov rdi, read_radius_prompt
+    67 0000000E E8(F6FFFFFF)            call printf
+    68 00000013 48C7C7[00000000]        mov rdi, read_radius_fmt
+    69 0000001A 48C7C6[00000000]        mov rsi, radius
+    70 00000021 E8(F6FFFFFF)            call scanf
+    71                                 
+    72                                 
+    73 00000026 F30F7E0425[00000000]      movq xmm0, [radius]
+    74 0000002F E8(F6FFFFFF)            call c_area
+    75 00000034 48C7C001000000          mov rax, 1
+    76 0000003B 48C7C7[00000000]        mov rdi, print_c_area_fmt
+    77 00000042 E8(F6FFFFFF)            call printf
+    78                                 
+    79                                 
+    80 00000047 F30F7E0425[00000000]      movq xmm0, [radius]
+    81 00000050 E8(F6FFFFFF)            call c_circumference
+    82 00000055 48C7C001000000          mov rax, 1
+    83 0000005C 48C7C7[00000000]        mov rdi, print_c_circum_fmt
+    84 00000063 E8(F6FFFFFF)            call printf
+    85                                 
+    86                                 
+    87 00000068 4831C0                  xor rax, rax
+    88 0000006B 48C7C7[00000000]        mov rdi, read_length_prompt
+    89 00000072 E8(F6FFFFFF)            call printf
+    90 00000077 48C7C7[00000000]        mov rdi, read_int_fmt
+    91 0000007E 48C7C6[00000000]        mov rsi, length
+    92 00000085 E8(F6FFFFFF)            call scanf
+    93                                 
+    94 0000008A 4831C0                  xor rax, rax
+    95 0000008D 48C7C7[00000000]        mov rdi, read_breadth_prompt
+    96 00000094 E8(F6FFFFFF)            call printf
+    97 00000099 48C7C7[00000000]        mov rdi, read_int_fmt
+    98 000000A0 48C7C6[00000000]        mov rsi, breadth
+    99 000000A7 E8(F6FFFFFF)            call scanf
+   100                                 
+   101                                 
+   102 000000AC 488B3C25[00000000]      mov rdi, [length]
+   103 000000B4 488B3425[00000000]      mov rsi, [breadth]
+   104 000000BC E8(F6FFFFFF)            call r_area
+   105 000000C1 48C7C7[00000000]        mov rdi, print_r_area_fmt
+   106 000000C8 4889C6                  mov rsi, rax
+   107 000000CB 4831C0                  xor rax, rax
+   108 000000CE E8(F6FFFFFF)            call printf
+   109                                 
+   110                                 
+   111 000000D3 488B3C25[00000000]      mov rdi, [length]
+   112 000000DB 488B3425[00000000]      mov rsi, [breadth]
+   113 000000E3 E8(F6FFFFFF)            call r_perimeter
+   114 000000E8 48C7C7[00000000]        mov rdi, print_r_perimeter_fmt
+   115 000000EF 4889C6                  mov rsi, rax
+   116 000000F2 4831C0                  xor rax, rax
+   117 000000F5 E8(F6FFFFFF)            call printf
+   118                                 
+   119 000000FA C9                      leave
+   120 000000FB 4831C0                  xor rax, rax
+   121 000000FE C3                      ret
+   122                                 
