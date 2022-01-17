@@ -1,0 +1,80 @@
+     1                                 %line 1+1 main.asm
+     2                                 
+     3                                 
+     4                                 [extern printf]
+     5                                 [extern scanf]
+     6                                 [extern add_ints]
+     7                                 [extern sub_ints]
+     8                                 [extern mul_ints]
+     9                                 [extern div_ints]
+    10                                 
+    11                                 [section .data]
+    12                                 [section .bss]
+    13 00000000 <gap>                   number1 resq 1
+    14 00000008 <gap>                   number2 resq 1
+    15                                 
+    16                                 [section .text]
+    17                                 [global main]
+    18                                 
+    19                                 main:
+    20 00000000 55                      push rbp
+    21 00000001 4889E5                  mov rbp, rsp
+    22                                 
+    23                                 
+    24 00000004 48C7C7[00000000]        mov rdi, number1
+    25 0000000B E860000000              call read_int
+    26                                 
+    27                                 
+    28 00000010 48C7C7[00000000]        mov rdi, number2
+    29 00000017 E854000000              call read_int
+    30                                 
+    31                                 
+    32 0000001C 488B3C25[00000000]      mov rdi, [number1]
+    33 00000024 488B3425[00000000]      mov rsi, [number2]
+    34 0000002C E8(F6FFFFFF)            call add_ints
+    35                                 
+    36                                 
+    37 00000031 488B3C25[00000000]      mov rdi, [number1]
+    38 00000039 488B3425[00000000]      mov rsi, [number2]
+    39 00000041 E8(F6FFFFFF)            call sub_ints
+    40                                 
+    41                                 
+    42 00000046 488B3C25[00000000]      mov rdi, [number1]
+    43 0000004E 488B3425[00000000]      mov rsi, [number2]
+    44 00000056 E8(F6FFFFFF)            call mul_ints
+    45                                 
+    46                                 
+    47 0000005B 488B3C25[00000000]      mov rdi, [number1]
+    48 00000063 488B3425[00000000]      mov rsi, [number2]
+    49 0000006B E8(F6FFFFFF)            call div_ints
+    50                                 
+    51 00000070 C9                      leave
+    52 00000071 4831C0                  xor rax, rax
+    53 00000074 C3                      ret
+    54                                 
+    55                                 read_int:
+    56                                 [section .data]
+    57 00000000 456E746572206E756D-     .prompt_int db 'Enter number:',10,0
+    58 00000000 6265723A0A00       
+    59 0000000F 256400                  .read_int_fmt db '%d',0
+    60                                 
+    61                                 [section .text]
+    62 00000075 55                      push rbp
+    63 00000076 4889E5                  mov rbp, rsp
+    64                                 
+    65                                 
+    66                                 
+    67 00000079 53                      push rbx
+    68 0000007A 4881E4F0FFFFFF          and rsp, 0xfffffffffffffff0
+    69 00000081 4889FB                  mov rbx, rdi
+    70                                 
+    71 00000084 4831C0                  xor rax, rax
+    72 00000087 48C7C7[00000000]        mov rdi, .prompt_int
+    73 0000008E E8(F6FFFFFF)            call printf
+    74 00000093 48C7C7[00000000]        mov rdi, .read_int_fmt
+    75 0000009A 4889DE                  mov rsi, rbx
+    76 0000009D E8(F6FFFFFF)            call scanf
+    77                                 
+    78 000000A2 5B                      pop rbx
+    79 000000A3 C9                      leave
+    80 000000A4 C3                      ret

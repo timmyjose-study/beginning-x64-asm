@@ -1,0 +1,165 @@
+     1                                 %line 1+1 bits2.asm
+     2                                 
+     3                                 
+     4                                 
+     5                                 [extern printf]
+     6                                 
+     7                                 [section .data]
+     8 00000000 53484C2032203D204F-     mul_shl db 'SHL 2 = OK multiply by 4',10,0
+     9 00000000 4B206D756C7469706C-
+    10 00000000 7920627920340A00   
+    11 0000001A 53414C2032203D204F-     mul_sal db 'SAL 2 = OK multiply by 4',10,0
+    12 0000001A 4B206D756C7469706C-
+    13 0000001A 7920627920340A00   
+    14 00000034 5348522032203D204F-     div_shr_ok db 'SHR 2 = OK divide by 4',10,0
+    15 00000034 4B2064697669646520-
+    16 00000034 627920340A00       
+    17 0000004C 5348522032203D2077-     div_shr_not_ok db 'SHR 2 = wrong divide by 4',10,0
+    18 0000004C 726F6E672064697669-
+    19 0000004C 646520627920340A00 
+    20 00000067 5341522032203D204F-     div_sar db 'SAR 2 = OK divide by 4',10,0
+    21 00000067 4B2064697669646520-
+    22 00000067 627920340A00       
+    23                                 
+    24 0000007F 546865206F72696769-     print_num db 'The original number is %ld',10,0
+    25 0000007F 6E616C206E756D6265-
+    26 0000007F 7220697320256C640A-
+    27 0000007F 00                 
+    28 0000009B 54686520726573756C-     print_result db 'The resulting number is %ld',10,10,0
+    29 0000009B 74696E67206E756D62-
+    30 0000009B 657220697320256C64-
+    31 0000009B 0A0A00             
+    32 000000B9 0800000000000000        number1 dq 8
+    33 000000C1 F8FFFFFFFFFFFFFF        number2 dq -8
+    34                                 
+    35                                 [section .text]
+    36                                 [global main]
+    37                                 
+    38                                 main:
+    39 00000000 55                      push rbp
+    40 00000001 4889E5                  mov rbp, rsp
+    41                                 
+    42                                 
+    43 00000004 488B0425[00000000]      mov rax, [number1]
+    44 0000000C 48C1E002                shl rax, 2
+    45 00000010 48C7C7[00000000]        mov rdi, mul_shl
+    46 00000017 48C7C6[00000000]        mov rsi, print_num
+    47 0000001E 488B1425[00000000]      mov rdx, [number1]
+    48 00000026 48C7C1[00000000]        mov rcx, print_result
+    49 0000002D 4989C0                  mov r8, rax
+    50 00000030 E857010000              call print_stats
+    51                                 
+    52 00000035 488B0425[00000000]      mov rax, [number2]
+    53 0000003D 48C1E002                sal rax, 2
+    54 00000041 48C7C7[00000000]        mov rdi, mul_shl
+    55 00000048 48C7C6[00000000]        mov rsi, print_num
+    56 0000004F 488B1425[00000000]      mov rdx, [number2]
+    57 00000057 48C7C1[00000000]        mov rcx, print_result
+    58 0000005E 4989C0                  mov r8, rax
+    59 00000061 E826010000              call print_stats
+    60                                 
+    61                                 
+    62 00000066 488B0425[00000000]      mov rax, [number1]
+    63 0000006E 48C1E002                sal rax, 2
+    64 00000072 48C7C7[00000000]        mov rdi, mul_sal
+    65 00000079 48C7C6[00000000]        mov rsi, print_num
+    66 00000080 488B1425[00000000]      mov rdx, [number1]
+    67 00000088 48C7C1[00000000]        mov rcx, print_result
+    68 0000008F 4989C0                  mov r8, rax
+    69 00000092 E8F5000000              call print_stats
+    70                                 
+    71 00000097 488B0425[00000000]      mov rax, [number2]
+    72 0000009F 48C1E002                sal rax, 2
+    73 000000A3 48C7C7[00000000]        mov rdi, mul_sal
+    74 000000AA 48C7C6[00000000]        mov rsi, print_num
+    75 000000B1 488B1425[00000000]      mov rdx, [number2]
+    76 000000B9 48C7C1[00000000]        mov rcx, print_result
+    77 000000C0 4989C0                  mov r8, rax
+    78 000000C3 E8C4000000              call print_stats
+    79                                 
+    80                                 
+    81 000000C8 488B0425[00000000]      mov rax, [number1]
+    82 000000D0 48C1E802                shr rax, 2
+    83 000000D4 48C7C7[00000000]        mov rdi, div_shr_ok
+    84 000000DB 48C7C6[00000000]        mov rsi, print_num
+    85 000000E2 488B1425[00000000]      mov rdx, [number1]
+    86 000000EA 48C7C1[00000000]        mov rcx, print_result
+    87 000000F1 4989C0                  mov r8, rax
+    88 000000F4 E893000000              call print_stats
+    89                                 
+    90 000000F9 488B0425[00000000]      mov rax, [number2]
+    91 00000101 48C1E802                shr rax, 2
+    92 00000105 48C7C7[00000000]        mov rdi, div_shr_not_ok
+    93 0000010C 48C7C6[00000000]        mov rsi, print_num
+    94 00000113 488B1425[00000000]      mov rdx, [number2]
+    95 0000011B 48C7C1[00000000]        mov rcx, print_result
+    96 00000122 4989C0                  mov r8, rax
+    97 00000125 E862000000              call print_stats
+    98                                 
+    99                                 
+   100 0000012A 488B0425[00000000]      mov rax, [number1]
+   101 00000132 48C1F802                sar rax, 2
+   102 00000136 48C7C7[00000000]        mov rdi, div_sar
+   103 0000013D 48C7C6[00000000]        mov rsi, print_num
+   104 00000144 488B1425[00000000]      mov rdx, [number1]
+   105 0000014C 48C7C1[00000000]        mov rcx, print_result
+   106 00000153 4989C0                  mov r8, rax
+   107 00000156 E831000000              call print_stats
+   108                                 
+   109 0000015B 488B0425[00000000]      mov rax, [number2]
+   110 00000163 48C1F802                sar rax, 2
+   111 00000167 48C7C7[00000000]        mov rdi, div_sar
+   112 0000016E 48C7C6[00000000]        mov rsi, print_num
+   113 00000175 488B1425[00000000]      mov rdx, [number2]
+   114 0000017D 48C7C1[00000000]        mov rcx, print_result
+   115 00000184 4989C0                  mov r8, rax
+   116 00000187 E800000000              call print_stats
+   117                                 
+   118 0000018C C9                      leave
+   119 0000018D 4831C0                  xor rax, rax
+   120 00000190 C3                      ret
+   121                                 
+   122                                 print_stats:
+   123                                 [section .text]
+   124 00000191 55                      push rbp
+   125 00000192 4889E5                  mov rbp, rsp
+   126                                 
+   127                                 
+   128                                 
+   129 00000195 53                      push rbx
+   130 00000196 4889FB                  mov rbx, rdi
+   131 00000199 4154                    push r12
+   132 0000019B 4989F4                  mov r12, rsi
+   133 0000019E 4155                    push r13
+   134 000001A0 4989D5                  mov r13, rdx
+   135 000001A3 4156                    push r14
+   136 000001A5 4989CE                  mov r14, rcx
+   137 000001A8 4157                    push r15
+   138 000001AA 4D89C7                  mov r15, r8
+   139                                 
+   140                                 
+   141 000001AD 4831C0                  xor rax, rax
+   142 000001B0 4889DF                  mov rdi, rbx
+   143 000001B3 E8(F6FFFFFF)            call printf
+   144                                 
+   145                                 
+   146 000001B8 4831C0                  xor rax, rax
+   147 000001BB 4C89E7                  mov rdi, r12
+   148 000001BE 4C89EE                  mov rsi, r13
+   149 000001C1 E8(F6FFFFFF)            call printf
+   150                                 
+   151                                 
+   152 000001C6 4831C0                  xor rax, rax
+   153 000001C9 4C89F7                  mov rdi, r14
+   154 000001CC 4C89FE                  mov rsi, r15
+   155 000001CF E8(F6FFFFFF)            call printf
+   156                                 
+   157                                 
+   158 000001D4 415F                    pop r15
+   159 000001D6 415E                    pop r14
+   160 000001D8 415D                    pop r13
+   161 000001DA 415C                    pop r12
+   162 000001DC 5B                      pop rbx
+   163                                 
+   164 000001DD C9                      leave
+   165 000001DE C3                      ret
